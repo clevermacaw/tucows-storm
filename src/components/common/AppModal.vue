@@ -39,7 +39,8 @@ const close = () => emit("close");
 .modal-content {
   position: relative;
   background-color: white;
-  max-width: 320px;
+  margin-left: 20px;
+  margin-right: 20px;
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -52,9 +53,15 @@ const close = () => emit("close");
   }
 }
 
+@media screen and (min-width: $breakpoint-md) {
+  .modal-content {
+    max-width: 850px;
+  }
+}
+
 @media screen and (min-width: $breakpoint-lg) {
   .modal-content {
-    max-width: 900px;
+    max-width: 1000px;
   }
 }
 

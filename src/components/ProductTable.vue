@@ -40,61 +40,69 @@ function sortTable(column: SortableColumns) {
 </script>
 
 <template>
-  <table class="product-table">
-    <thead>
-      <tr>
-        <th class="text-left">ID</th>
-        <th>Status</th>
-        <th @click="sortTable('quantity')">
-          Quantity
-          <span v-if="sortBy === 'quantity'" class="sort-icon">
-            <img :src="sortOrderSymbol" alt="sort order" />
-          </span>
-        </th>
-        <th @click="sortTable('name')">
-          Product name
-          <span v-if="sortBy === 'name'" class="sort-icon">
-            <img :src="sortOrderSymbol" alt="sort order" />
-          </span>
-        </th>
-        <th @click="sortTable('total')">
-          Prices
-          <span v-if="sortBy === 'total'" class="sort-icon">
-            <img :src="sortOrderSymbol" alt="sort order" />
-          </span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="product in products"
-        :key="product.id"
-        @click="handleSelect(product)"
-      >
-        <td>{{ product.id }}</td>
-        <td class="text-center">
-          <StatusBadge :variant="product.status" :text="product.status" />
-        </td>
-        <td class="text-center">{{ product.quantity }}</td>
-        <td class="text-left">
-          {{ product.name }}<br /><span class="serial">{{
-            product.serial
-          }}</span>
-        </td>
-        <td class="text-right">{{ formatPrice(product.total) }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th class="text-left">ID</th>
+          <th>Status</th>
+          <th @click="sortTable('quantity')">
+            Quantity
+            <span v-if="sortBy === 'quantity'" class="sort-icon">
+              <img :src="sortOrderSymbol" alt="sort order" />
+            </span>
+          </th>
+          <th @click="sortTable('name')">
+            Product name
+            <span v-if="sortBy === 'name'" class="sort-icon">
+              <img :src="sortOrderSymbol" alt="sort order" />
+            </span>
+          </th>
+          <th @click="sortTable('total')">
+            Prices
+            <span v-if="sortBy === 'total'" class="sort-icon">
+              <img :src="sortOrderSymbol" alt="sort order" />
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="product in products"
+          :key="product.id"
+          @click="handleSelect(product)"
+        >
+          <td>{{ product.id }}</td>
+          <td class="text-center">
+            <StatusBadge :variant="product.status" :text="product.status" />
+          </td>
+          <td class="text-center">{{ product.quantity }}</td>
+          <td class="text-left">
+            {{ product.name }}<br /><span class="serial">{{
+              product.serial
+            }}</span>
+          </td>
+          <td class="text-right">{{ formatPrice(product.total) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.table-responsive {
+  overflow-x: auto;
+}
+
 .product-table {
   width: 100%;
+  min-width: 800px;
   border: 1px solid #e4e4ef;
   border-radius: 8px;
 
   .serial {
     color: #808080;
+    font-size: 12px;
   }
 
   .sort-icon {

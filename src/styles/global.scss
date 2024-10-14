@@ -24,6 +24,12 @@
   padding: 72px;
 }
 
+@media screen and (max-width: $breakpoint-lg) {
+  #app {
+    padding: 48px 32px;
+  }
+}
+
 .text-center {
   text-align: center;
 }

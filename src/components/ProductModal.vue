@@ -2,6 +2,7 @@
 import { PropType } from "vue";
 import AppModal from "./common/AppModal.vue";
 import { Product } from "@/types";
+import AppButton from "./common/AppButton.vue";
 
 defineProps({
   isOpen: Boolean,
@@ -40,6 +41,11 @@ function handleClose() {
         discrete GPU designed for pro users. With 8GB of HBM2
       </div>
     </div>
+    <div class="actions">
+      <AppButton variant="secondary" class="close-button" @click="handleClose"
+        >Close</AppButton
+      >
+    </div>
   </AppModal>
 </template>
 
@@ -60,6 +66,27 @@ function handleClose() {
 
   & > * {
     width: 50%;
+  }
+
+  @media screen and (max-width: $breakpoint-md) {
+    & {
+      flex-direction: column;
+    }
+
+    & > * {
+      width: 100%;
+    }
+  }
+}
+
+.actions {
+  margin-top: 32px;
+  text-align: right;
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .close-button {
+    width: 100%;
   }
 }
 </style>

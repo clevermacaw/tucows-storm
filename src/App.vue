@@ -5,12 +5,14 @@ import AppInput from "./components/common/AppInput.vue";
 import ProductModal from "./components/ProductModal.vue";
 import ProductTable from "./components/ProductTable.vue";
 import logo from "@/assets/logo.png";
-import notificationsIcon from "@/assets/notifications.svg";
+import menuIcon from "@/assets/menu.svg";
+
 import searchIcon from "@/assets/search.svg";
-import settingsIcon from "@/assets/settings.svg";
-import userIcon from "@/assets/user.svg";
+
 import { Product, SortableColumns, SortOrder } from "./types";
 import { getProducts } from "./api";
+import ProductTableMobile from "./components/ProductTableMobile.vue";
+import UserToolbar from "./components/UserToolbar.vue";
 
 const query = ref("");
 const products = ref<Product[]>([]);
@@ -18,6 +20,7 @@ const selectedProduct = ref<Product | null>(null);
 const isProductModalOpen = ref(false);
 const sortOrder = ref<SortOrder>("desc");
 const sortBy = ref<SortableColumns>("total");
+const isMenuHidden = ref(true);
 
 const productsChunk = computed(() => {
   return products.value.slice(0, 10);
@@ -56,6 +59,10 @@ function handleSortProducts(
   fetchProducts();
 }
 
+function handleToggleMenu() {
+  isMenuHidden.value = !isMenuHidden.value;
+}
+
 onMounted(() => {
   fetchProducts();
 });
@@ -66,8 +73,15 @@ onMounted(() => {
     <nav>
       <div class="nav-left">
         <img :src="logo" alt="logo" />
+        <div class="menu-icon" @click="handleToggleMenu">
+          <img :src="menuIcon" alt="hamburger" />
+        </div>
       </div>
+
       <div class="nav-right">
+        <div :class="['toolbar-mobile', { hidden: isMenuHidden }]">
+          <UserToolbar />
+        </div>
         <form class="search" @submit="handleSearch">
           <AppInput
             v-model="query"
@@ -78,18 +92,7 @@ onMounted(() => {
           <AppButton type="submit">Search</AppButton>
         </form>
         <div class="toolbar">
-          <div class="icon">
-            <img :src="settingsIcon" alt="settings icon" />
-          </div>
-          <div class="icon">
-            <img :src="notificationsIcon" alt="notifications icon" />
-          </div>
-          <div class="user">
-            <div class="icon">
-              <img :src="userIcon" alt="user icon" />
-            </div>
-            <span>Adriana Arias</span>
-          </div>
+          <UserToolbar />
         </div>
       </div>
     </nav>
@@ -100,13 +103,21 @@ onMounted(() => {
         Products
         <span>{{ productsChunk.length }} of {{ products.length }} results</span>
       </div>
-      <ProductTable
-        :products="productsChunk"
-        :sort-order="sortOrder"
-        :sort-by="sortBy"
-        @select="handleSelectProduct"
-        @sort="handleSortProducts"
-      />
+      <div class="product-table__container">
+        <ProductTable
+          :products="productsChunk"
+          :sort-order="sortOrder"
+          :sort-by="sortBy"
+          @select="handleSelectProduct"
+          @sort="handleSortProducts"
+        />
+      </div>
+      <div class="product-table__mobile__container">
+        <ProductTableMobile
+          :products="productsChunk"
+          @select="handleSelectProduct"
+        />
+      </div>
     </div>
     <ProductModal
       :product="selectedProduct"
@@ -149,23 +160,64 @@ header {
     gap: 16px;
   }
 
-  .icon {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   .toolbar {
     display: flex;
     gap: 4px;
   }
 
-  .user {
-    display: flex;
-    align-items: center;
-    color: $primary-color;
+  .toolbar-mobile {
+    display: none;
+  }
+
+  .menu-icon {
+    display: none;
+  }
+
+  @media screen and (max-width: $breakpoint-md) {
+    .toolbar {
+      display: none;
+    }
+
+    .toolbar-mobile {
+      display: flex;
+      gap: 4px;
+      justify-content: flex-end;
+
+      &.hidden {
+        display: none;
+      }
+    }
+
+    .menu-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4px;
+
+      &:hover {
+        background-color: #e4e4ef;
+      }
+    }
+
+    nav {
+      flex-direction: column;
+
+      .nav-left {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-right {
+        display: block;
+        margin-top: 12px;
+      }
+    }
+
+    .search.hidden {
+      display: none;
+    }
   }
 }
 
@@ -181,6 +233,28 @@ header {
       font-weight: 400;
       color: #808080;
     }
+  }
+
+  @media screen and (max-width: $breakpoint-md) {
+    padding-top: 24px;
+  }
+}
+
+.product-table__container {
+  display: block;
+}
+
+.product-table__mobile__container {
+  display: none;
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .product-table__container {
+    display: none;
+  }
+
+  .product-table__mobile__container {
+    display: block;
   }
 }
 </style>
