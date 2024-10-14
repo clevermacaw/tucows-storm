@@ -1,20 +1,84 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { computed, ref, onMounted } from "vue";
+import AppButton from "./components/AppButton.vue";
+import AppInput from "./components/AppInput.vue";
+import ProductTable from "./components/ProductTable.vue";
+import logo from "@/assets/logo.png";
+import notificationsIcon from "@/assets/notifications.svg";
+import searchIcon from "@/assets/search.svg";
+import settingsIcon from "@/assets/settings.svg";
+import userIcon from "@/assets/user.svg";
+import { Product } from "./types";
+import { getProducts } from "./api";
+
+const query = ref("");
+const products = ref<Product[]>([]);
+
+const productsChunk = computed(() => {
+  return products.value.slice(0, 10);
+});
+
+function handleSearch(e: Event) {
+  (e as SubmitEvent).preventDefault();
+  fetchProducts();
+}
+
+function fetchProducts() {
+  getProducts(query.value).then((res) => {
+    products.value = res.products;
+  });
+}
+
+onMounted(() => {
+  fetchProducts();
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <header>
+    <nav>
+      <div class="nav-left">
+        <img :src="logo" alt="logo" />
+      </div>
+      <div class="nav-right">
+        <form class="search" @submit="handleSearch">
+          <AppInput
+            v-model="query"
+            class="has-icon"
+            placeholder="Search"
+            :icon="searchIcon"
+          />
+          <AppButton type="submit">Search</AppButton>
+        </form>
+        <div class="toolbar">
+          <div class="icon">
+            <img :src="settingsIcon" alt="settings icon" />
+          </div>
+          <div class="icon">
+            <img :src="notificationsIcon" alt="notifications icon" />
+          </div>
+          <div class="user">
+            <div class="icon">
+              <img :src="userIcon" alt="user icon" />
+            </div>
+            <span>Adriana Arias</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="products">
+      <div class="title">
+        Products
+        <span>{{ productsChunk.length }} of {{ products.length }} results</span>
+      </div>
+      <ProductTable :products="productsChunk" />
+    </div>
+  </main>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -26,5 +90,51 @@ import HelloWorld from './components/HelloWorld.vue'
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+header {
+  nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .nav-right {
+      margin-left: auto;
+      display: flex;
+      gap: 32px;
+    }
+  }
+
+  .search {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 4px;
+  }
+
+  .user {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.products {
+  padding-top: 64px;
+
+  .title {
+    margin-bottom: 8px;
+  }
 }
 </style>

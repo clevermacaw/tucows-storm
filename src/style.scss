@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+@import "./variables";
+
+:root {
+  font-family: "Nunito Sans", Inter, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+#app {
+  padding: 72px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
