@@ -3,6 +3,7 @@ export type Product = {
   status: string;
   quantity: number;
   name: string;
+  image: string;
   serial: string;
   total: number;
 };

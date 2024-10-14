@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { PropType } from "vue";
-import { Product } from "@/types";
 import StatusBadge from "./StatusBadge.vue";
+import { Product } from "@/types";
 
 defineProps({
   products: Object as PropType<Product[]>,
 });
+
+const emit = defineEmits<{
+  (e: "select", product: Product): void;
+}>();
+
+function handleSelect(product: Product) {
+  emit("select", product);
+}
 </script>
 
 <template>
@@ -20,7 +28,11 @@ defineProps({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="product in products" :key="product.id">
+      <tr
+        v-for="product in products"
+        :key="product.id"
+        @click="() => handleSelect(product)"
+      >
         <td>{{ product.id }}</td>
         <td class="text-center">
           <StatusBadge :variant="product.status" :text="product.status" />
@@ -47,5 +59,10 @@ td {
 th,
 td {
   padding: 16px;
+}
+
+tbody tr:hover {
+  cursor: pointer;
+  background-color: azure;
 }
 </style>

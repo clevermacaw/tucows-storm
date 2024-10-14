@@ -18,8 +18,6 @@ defineProps({
 </template>
 
 <style lang="scss" scoped>
-@import "@/variables";
-
 .badge {
   border-radius: 16px;
   text-align: center;

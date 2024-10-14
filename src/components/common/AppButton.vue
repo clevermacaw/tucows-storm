@@ -5,8 +5,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@/variables";
-
 button {
   padding: 12px 24px;
   color: white;

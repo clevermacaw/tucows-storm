@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
-import AppButton from "./components/AppButton.vue";
-import AppInput from "./components/AppInput.vue";
+import AppButton from "./components/common/AppButton.vue";
+import AppInput from "./components/common/AppInput.vue";
+import ProductModal from "./components/ProductModal.vue";
 import ProductTable from "./components/ProductTable.vue";
 import logo from "@/assets/logo.png";
 import notificationsIcon from "@/assets/notifications.svg";
@@ -13,6 +14,8 @@ import { getProducts } from "./api";
 
 const query = ref("");
 const products = ref<Product[]>([]);
+const selectedProduct = ref<Product | null>(null);
+const isProductModalOpen = ref(false);
 
 const productsChunk = computed(() => {
   return products.value.slice(0, 10);
@@ -27,6 +30,16 @@ function fetchProducts() {
   getProducts(query.value).then((res) => {
     products.value = res.products;
   });
+}
+
+function handleSelectProduct(product: Product) {
+  console.log("hello");
+  selectedProduct.value = product;
+  isProductModalOpen.value = true;
+}
+
+function handleCloseProductModal() {
+  isProductModalOpen.value = false;
 }
 
 onMounted(() => {
@@ -73,8 +86,13 @@ onMounted(() => {
         Products
         <span>{{ productsChunk.length }} of {{ products.length }} results</span>
       </div>
-      <ProductTable :products="productsChunk" />
+      <ProductTable :products="productsChunk" @select="handleSelectProduct" />
     </div>
+    <ProductModal
+      :product="selectedProduct"
+      :is-open="isProductModalOpen"
+      @close="handleCloseProductModal"
+    />
   </main>
 </template>
 
