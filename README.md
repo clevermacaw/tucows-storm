@@ -1,5 +1,12 @@
-# Vue 3 + TypeScript + Vite
+# Tucows Storm
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+An application that provides a basic search functionality to look for products
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Tech Stack
+
+Vue3, TypeScript, SCSS
+
+## Get started
+
+- Install modules by running `npm install`
+- Run `npm run dev` to run the development server
