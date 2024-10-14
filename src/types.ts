@@ -7,3 +7,7 @@ export type Product = {
   serial: string;
   total: number;
 };
+
+export type SortableColumns = "name" | "total" | "quantity";
+
+export type SortOrder = "asc" | "desc";

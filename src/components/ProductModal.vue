@@ -21,7 +21,10 @@ function handleClose() {
   <AppModal :is-open="isOpen" @close="handleClose">
     <h6 class="title">{{ product?.name }}</h6>
     <div class="content">
-      <img :src="product?.image" alt="product picture" />
+      <img
+        :src="product?.image ?? '/placeholder_noimage.webp'"
+        alt="product picture"
+      />
       <div>
         Key Features
         <ul>

@@ -9,13 +9,15 @@ import notificationsIcon from "@/assets/notifications.svg";
 import searchIcon from "@/assets/search.svg";
 import settingsIcon from "@/assets/settings.svg";
 import userIcon from "@/assets/user.svg";
-import { Product } from "./types";
+import { Product, SortableColumns, SortOrder } from "./types";
 import { getProducts } from "./api";
 
 const query = ref("");
 const products = ref<Product[]>([]);
 const selectedProduct = ref<Product | null>(null);
 const isProductModalOpen = ref(false);
+const sortOrder = ref<SortOrder>("desc");
+const sortBy = ref<SortableColumns>("total");
 
 const productsChunk = computed(() => {
   return products.value.slice(0, 10);
@@ -27,19 +29,31 @@ function handleSearch(e: Event) {
 }
 
 function fetchProducts() {
-  getProducts(query.value).then((res) => {
+  getProducts({
+    query: query.value,
+    sortBy: sortBy.value,
+    sortOrder: sortOrder.value,
+  }).then((res) => {
     products.value = res.products;
   });
 }
 
 function handleSelectProduct(product: Product) {
-  console.log("hello");
   selectedProduct.value = product;
   isProductModalOpen.value = true;
 }
 
 function handleCloseProductModal() {
   isProductModalOpen.value = false;
+}
+
+function handleSortProducts(
+  newSortBy: SortableColumns,
+  newSortOrder: SortOrder
+) {
+  sortBy.value = newSortBy;
+  sortOrder.value = newSortOrder;
+  fetchProducts();
 }
 
 onMounted(() => {
@@ -86,7 +100,13 @@ onMounted(() => {
         Products
         <span>{{ productsChunk.length }} of {{ products.length }} results</span>
       </div>
-      <ProductTable :products="productsChunk" @select="handleSelectProduct" />
+      <ProductTable
+        :products="productsChunk"
+        :sort-order="sortOrder"
+        :sort-by="sortBy"
+        @select="handleSelectProduct"
+        @sort="handleSortProducts"
+      />
     </div>
     <ProductModal
       :product="selectedProduct"
@@ -145,6 +165,7 @@ header {
   .user {
     display: flex;
     align-items: center;
+    color: $primary-color;
   }
 }
 
@@ -153,6 +174,13 @@ header {
 
   .title {
     margin-bottom: 8px;
+    font-weight: 700;
+
+    span {
+      font-size: 12px;
+      font-weight: 400;
+      color: #808080;
+    }
   }
 }
 </style>

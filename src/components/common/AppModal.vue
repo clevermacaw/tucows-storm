@@ -46,13 +46,13 @@ const close = () => emit("close");
   animation: slide-down 0.3s ease-out;
 }
 
-@media screen and (min-width: 576px) {
+@media screen and (min-width: $breakpoint-sm) {
   .modal-content {
     max-width: 500px;
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: $breakpoint-lg) {
   .modal-content {
     max-width: 900px;
   }
