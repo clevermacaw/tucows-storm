@@ -3,7 +3,7 @@ import { PropType } from "vue";
 
 defineProps({
   variant: {
-    type: Object as PropType<"primary" | "secondary">,
+    type: String as PropType<"primary" | "secondary">,
     default: "primary",
   },
 });

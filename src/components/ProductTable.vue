@@ -9,11 +9,11 @@ import downIcon from "@/assets/chevron-down.svg";
 const props = defineProps({
   products: Object as PropType<Product[]>,
   sortBy: {
-    type: Object as PropType<SortableColumns>,
+    type: String as PropType<SortableColumns>,
     default: "price",
   },
   sortOrder: {
-    type: Object as PropType<SortOrder>,
+    type: String as PropType<SortOrder>,
     default: "desc",
   },
 });
